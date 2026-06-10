@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "pecubegui"
-version = "0.1.19"
+version = "0.1.20"
 description = "A GUI-based tool for the Pecube thermochronology software."
 authors = [
     {name = "Maxime Bernard"}
@@ -35,7 +35,7 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-pecube = ["pecube==4.3.8"]
+pecube = ["pecube==4.3.9"]
 
 [project.urls]
 Documentation = "https://pecubegui-doc.readthedocs.io/en/latest/index.html"
