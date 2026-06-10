@@ -167,7 +167,18 @@ class MainWindow(QMainWindow, object):
         self.app = app            
         self.PrefList = conf.PrefList 
         self.FolderPath = FolderPath
-        self.PecubePath = os.path.abspath(self.PrefList['PecubePath'])
+        # Try to find Pecube in PATH if PrefList path is invalid
+        try:
+            import pecube
+            self.PecubePath = pecube.DATA_DIR
+        except ImportError:
+            _pref = self.PrefList.get('PecubePath', '')
+            if _pref and os.path.isdir(os.path.abspath(_pref)):
+                self.PecubePath = os.path.abspath(_pref)
+            else:
+                _bin = shutil.which("Pecube")
+                # shutil.which returns the binary; go up two levels (bin/ → root)
+                self.PecubePath = os.path.dirname(os.path.dirname(_bin)) if _bin else ""
         self.UI()
         self.oldInput = 0 #signal for old input file
         self.InputParamSignal = 0 #Signal for input parameters provided
@@ -447,7 +458,7 @@ class MainWindow(QMainWindow, object):
     def saveFile(self):
         """ To save the file "preferences.txt". """
         
-        name = os.path.join(self.FolderPath,"Core","preferences.txt")
+        name = os.path.join(pgu.get_preferences_path())
         try:
             file = open(name, 'w')
         except PermissionError:
@@ -792,41 +803,26 @@ def main():
 
     # Try to locate the Pecube folder with the default path
     # if no success, ask the user to provide the path    
-    try:
-        TestFile = open(os.path.join(conf.PecubeFolderPath,"bin","compile.sh"),'r')
-        TestFile.close()
-    except FileNotFoundError:
-        try:
-            path = os.path.join(conf.FolderPath,"Pecube","bin","compile.sh")
-            TestFile = open(path,'r')
-            TestFile.close()
-            path = os.path.abspath(os.path.join(conf.FolderPath,"Pecube"))
-            conf.PrefList['PecubePath'] = path
-            conf.PecubeFolderPath = path
+    if not os.path.isfile(os.path.join(conf.PecubeFolderPath, "bin", "Pecube")):
+        reply = QMessageBox()
+        reply.setText("The Pecube's folder has not been found.\n"+
+                      "Please, provide the current path of Pecube.")
+        reply.setIcon(QMessageBox.Information)
+        reply.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
+        retval = reply.exec_()
+        if retval == QMessageBox.Ok:
+            PecubeFolderPath = QFileDialog.getExistingDirectory()
+            conf.PecubeFolderPath = os.path.abspath(PecubeFolderPath)
+            print(conf.PecubeFolderPath)
+            conf.PrefList['PecubePath'] = PecubeFolderPath
+            # Save new path
+            conf.PreferencesPath = pgu.get_preferences_path()
+            # if sys.platform == 'win32' or sys.platform =='cygwin':
+                # change_access_rights(conf.PreferencesPath, AccessRight.Full)
             file = open(conf.PreferencesPath, 'w+')
             for k, v in conf.PrefList.items():
                 file.write(str(k) + ' = ' + str(v) + ' \n')
             file.close()
-        except FileNotFoundError:
-            reply = QMessageBox()
-            reply.setText("The Pecube's folder has not been found.\n"+
-                          "Please, provide the current path of Pecube.")
-            reply.setIcon(QMessageBox.Information)
-            reply.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
-            retval = reply.exec_()
-            if retval == QMessageBox.Ok:
-                PecubeFolderPath = QFileDialog.getExistingDirectory()
-                conf.PecubeFolderPath = os.path.abspath(PecubeFolderPath)
-                print(conf.PecubeFolderPath)
-                conf.PrefList['PecubePath'] = PecubeFolderPath
-                # Save new path
-                conf.PreferencesPath = os.path.join(FolderPath,"Core","preferences.txt")
-                # if sys.platform == 'win32' or sys.platform =='cygwin':
-                    # change_access_rights(conf.PreferencesPath, AccessRight.Full)
-                file = open(conf.PreferencesPath, 'w+')
-                for k, v in conf.PrefList.items():
-                    file.write(str(k) + ' = ' + str(v) + ' \n')
-                file.close()
                 
     # Show the Pecube's interface
     window = MainWindow(app)  # create the window
