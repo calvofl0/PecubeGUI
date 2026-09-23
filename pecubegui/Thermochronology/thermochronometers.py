@@ -585,13 +585,25 @@ class set_Thermochron_Parameters(QWidget):
             
         # Write parameters for AFT
         try:
+            file.write(str(self.parent.input_parameters[conf.Variable_names['FTL_kinetic_parameter']])+'\t')
+        except KeyError:
+            file.write(str(self.Param.DParameters[conf.Variable_names['FTL_kinetic_parameter']])+'\t')
+        try:
+            file.write(str(self.parent.input_parameters[conf.Variable_names['Initial_FTL_model']])+'\t')
+        except KeyError:
+            file.write(str(self.Param.DParameters[conf.Variable_names['Initial_FTL_model']])+'\t')
+        try:
             file.write(str(self.parent.input_parameters[conf.Variable_names['FissionTrackModel']])+'\t')
         except KeyError:
             file.write(str(self.Param.DParameters[conf.Variable_names['FissionTrackModel']])+'\t') # By default Ketcham et al. (2007)
         try:
-            file.write(str(self.parent.input_parameters['rhoST'])+'\n')
+            file.write(str(self.parent.input_parameters['rhoST'])+'\t')
         except KeyError:
-            file.write(str(self.Param.DParameters['rhoST'])+'\n')
+            file.write(str(self.Param.DParameters['rhoST'])+'\t')
+        try:
+            file.write(str(self.parent.input_parameters[conf.Variable_names['Unannealed_FTL_value']])+'\n')
+        except KeyError:
+            file.write(str(self.Param.DParameters[conf.Variable_names['Unannealed_FTL_value']])+'\n')
             
        
         # Write parameters for KAr
