@@ -322,8 +322,11 @@ class old_Input:
                     self.ParametersInput.DParameters[conf.Variable_names['Ea_Zircon']] = parameters_list[i+idnumber+nbSamples][2]
                     #AFT parameters
                     idnumber += 1
-                    self.ParametersInput.DParameters['AnnModel'] = parameters_list[i+idnumber+nbSamples][0]
-                    self.ParametersInput.DParameters['rhoST'] = parameters_list[i+idnumber+nbSamples][1]
+                    self.ParametersInput.DParameters[conf.Variable_names['FTL_kinetic_parameter']] = parameters_list[i+idnumber+nbSamples][0]
+                    self.ParametersInput.DParameters[conf.Variable_names['Initial_FTL_model']] = parameters_list[i+idnumber+nbSamples][1]
+                    self.ParametersInput.DParameters['AnnModel'] = parameters_list[i+idnumber+nbSamples][2]
+                    self.ParametersInput.DParameters['rhoST'] = parameters_list[i+idnumber+nbSamples][3]
+                    self.ParametersInput.DParameters[conf.Variable_names['Unannealed_FTL_value']] = parameters_list[i+idnumber+nbSamples][4]
                     idnumber += 1
                     # self.ParametersInput.DParameters['NstepsHe43'] = parameters_list[i+idnumber+nbSamples][0]
                     # self.ParametersInput.DParameters['nColHe43'] = parameters_list[i+idnumber+nbSamples][1]
@@ -767,6 +770,7 @@ class Properties3D(QWidget):
             # Remove the mesh
             try: 
                 self.Object3D.plotter.remove_actor(self.MainMesh)
+                self.Object3D.plotter.remove_scalar_bar()
                 # Rebuild the mesh with updated color bar
                 self.MainMesh= self.Object3D.plotter.add_mesh(
                 self.grid,show_edges=False, cmap=self.ColormapCombo.currentText(), flip_scalars=True, scalar_bar_args=self.sargs, clim=[minval,maxval])
@@ -805,7 +809,7 @@ class Properties3D(QWidget):
         # Remove mesh from plottter
         self.Object3D.plotter.remove_actor(self.MainMesh)
         # Remove the current color bar
-        self.Object3D.plotter.remove_scalar_bar(title=active_scalar)
+        self.Object3D.plotter.remove_scalar_bar()
         # Plot the new mesh
         self.MainMesh= self.Object3D.plotter.add_mesh(
         self.grid,show_edges=False, cmap=self.ColormapCombo.currentText(), scalars=dataToPlot, flip_scalars=True, scalar_bar_args=self.sargs)

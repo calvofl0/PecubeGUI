@@ -384,7 +384,7 @@ class plotPecubeNA(QWidget):
         size_m = 15
 
         # Set the size of the markers of the scatter plot and of the misfit
-        size_mis = 50
+        size_mis = 30
         
         self.MisfitEvol = Misfit_evol
 
