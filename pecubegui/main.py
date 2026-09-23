@@ -99,8 +99,7 @@ FolderPath = conf.FolderPath
 
 # Force to go to the directory of the executable
 print("Working Directory: ", FolderPath)
-# Suggestion: Avoid os.chdir() in library code. 
-# Better to use absolute paths relative to os.path.dirname(__file__) for assets.
+os.chdir(FolderPath)
     
 #Locate Icones directory
 IconPath = conf.IconPath
@@ -168,11 +167,7 @@ class MainWindow(QMainWindow, object):
         self.app = app            
         self.PrefList = conf.PrefList 
         self.FolderPath = FolderPath
-        # Try to find Pecube in PATH if PrefList path is invalid
-        if os.path.exists(self.PrefList.get('PecubePath', '')):
-            self.PecubePath = os.path.abspath(self.PrefList['PecubePath'])
-        else:
-            self.PecubePath = shutil.which("Pecube") or ""
+        self.PecubePath = os.path.abspath(self.PrefList['PecubePath'])
         self.UI()
         self.oldInput = 0 #signal for old input file
         self.InputParamSignal = 0 #Signal for input parameters provided
@@ -452,7 +447,7 @@ class MainWindow(QMainWindow, object):
     def saveFile(self):
         """ To save the file "preferences.txt". """
         
-        name = os.path.join(pgu.get_preferences_path())
+        name = os.path.join(self.FolderPath,"Core","preferences.txt")
         try:
             file = open(name, 'w')
         except PermissionError:
@@ -825,7 +820,7 @@ def main():
                 print(conf.PecubeFolderPath)
                 conf.PrefList['PecubePath'] = PecubeFolderPath
                 # Save new path
-                conf.PreferencesPath = pgu.get_preferences_path()
+                conf.PreferencesPath = os.path.join(FolderPath,"Core","preferences.txt")
                 # if sys.platform == 'win32' or sys.platform =='cygwin':
                     # change_access_rights(conf.PreferencesPath, AccessRight.Full)
                 file = open(conf.PreferencesPath, 'w+')
