@@ -2708,7 +2708,7 @@ class GraphWin(pvqt.MainWindow):
             data_cleaned = np.array(dataSelected.values)
         
             if self.fileName == 'Compare43He.csv':
-                cmap = matplotlib.cm.get_cmap('hsv')
+                cmap = plt.get_cmap('hsv')
                 colors = [cmap(i*1/nbSamples) for i in range(len(nbGrain_per_sample)) for j in range(int(nbGrain_per_sample[i][0]))]
                 Headers = ['\u03A3F3He', 'Rstep/Rbulk']
                 nb_grains = int(len(data_cleaned[1, :])/2)
@@ -2950,7 +2950,7 @@ class GraphWin(pvqt.MainWindow):
                 if self.fileName == 'TimeTemperaturePaths.csv':
                     Headers = ['Time (Ma)', 'Temperature (°C)']
                     textTemp = self.HeadersLabel
-                    cmap = matplotlib.cm.get_cmap('hsv')
+                    cmap = plt.get_cmap('hsv')
                     colors = [cmap(i*1/nbSamples) for i in range(len(nbGrain_per_sample)) for j in range(int(nbGrain_per_sample[i][0]))]
                     textlegend = [textTemp[i+1] for i in dataIndex[:]]
                     itemText = 'tT_paths'
@@ -2962,7 +2962,7 @@ class GraphWin(pvqt.MainWindow):
                 elif self.fileName.startswith("Grain"):
                     if self.He4He3:
                         Headers = ['\u03A3F$^3$He', 'Rstep/Rbulk']
-                        cmap = matplotlib.cm.get_cmap('hsv')
+                        cmap = plt.get_cmap('hsv')
                         colors = [cmap(i*1/nbSamples) for i in range(len(nbGrain_per_sample)) for j in range(int(nbGrain_per_sample[i][0]))]
                         data_cleaned = pd.DataFrame([self.cum3He,self.He_ratio]).T
                         data_cleaned = np.array(data_cleaned.values)
