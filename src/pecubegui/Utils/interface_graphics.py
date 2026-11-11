@@ -2928,7 +2928,7 @@ class GraphWin(pvqt.MainWindow):
                 X,Y = np.meshgrid(y,x)
                 # Reshape data accordingly
                 Z = np.transpose(np.reshape(CoolingRates,(ny,nx)))
-                reversed_map = plt.cm.get_cmap('coolwarm')
+                reversed_map = plt.get_cmap('coolwarm')
                 self.plotSpace = pgu.PlotCanvas(self, width=5, height=4)
                 self.toolbar = NavigationToolbar(self.plotSpace,self)
                 self.plotSpace.axes.set_title('Cooling rates (°C/Myr) Range: '+str(minTemp)+'-'+str(maxTemp))
@@ -3157,11 +3157,11 @@ class GraphWin(pvqt.MainWindow):
                     data_vtk = data_vtk[nz-1::nz]
                 # Set coloramp
                 if self.dataVTK_name == 'Temperature' or self.dataVTK_name == "Temperature at depth = " + str(value) + " km":
-                    reversed_map = plt.cm.get_cmap('coolwarm')
+                    reversed_map = plt.get_cmap('coolwarm')
                 elif self.dataVTK_name == "Depth of isotherm " + str(value) + " °C":
-                    reversed_map = plt.cm.get_cmap('copper_r')
+                    reversed_map = plt.get_cmap('copper_r')
                 else:
-                    colmap = plt.cm.get_cmap('Oranges')
+                    colmap = plt.get_cmap('Oranges')
                     reversed_map = colmap.reversed()
                             
             else: # if AgesXXX.vtk
@@ -3172,7 +3172,7 @@ class GraphWin(pvqt.MainWindow):
                 coordy = np.flipud(coordy)
                 coordz = coord[:,2]
                 
-                colmap = plt.cm.get_cmap('Oranges')
+                colmap = plt.get_cmap('Oranges')
                 reversed_map = colmap.reversed()
                 
             # Want normalized value
