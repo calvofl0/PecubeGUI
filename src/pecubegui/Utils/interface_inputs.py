@@ -419,7 +419,7 @@ class ParamWin(QMainWindow, object):
             file.close()
             
             # 1) Check preferences
-            PreferencesPath = os.path.join(FolderPath,"Core","preferences.txt")
+            PreferencesPath = conf.PreferencesPath
             with open(PreferencesPath) as file:
                 for line in file:
                     if "ShowConsole" in line:
